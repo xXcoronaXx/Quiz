@@ -10,6 +10,21 @@ a {
   color: #00B7FF;
 }
 
+a i {
+	color: black;
+	font-size: xx-large;
+}
+
+#autor {
+	margin: 5px;
+	width: 250px;
+	-moz-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+    border-radius: 100px;
+}
+
 #page-wrap{
 	margin:2% auto;
 	color:white;
