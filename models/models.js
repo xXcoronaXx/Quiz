@@ -43,6 +43,12 @@ sequelize.sync().then(function() {
       Quiz.create({ pregunta: 'Capital de Portugal',
                     respuesta: 'lisboa'
                  })
+      Quiz.create({ pregunta: '¿Cómo me llamo?',
+                    respuesta: 'antonio'
+                 })
+      Quiz.create({ pregunta: '¿De qué color es el caballo blanco de Santiago?',
+                    respuesta: 'blanco'
+                 })
       .then(function(){console.log('Base de datos inicializada')});
     };
   });

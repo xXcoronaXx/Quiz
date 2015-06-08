@@ -3,9 +3,18 @@ var models = require('../models/models.js');
 
 // GET quizes
 exports.index = function (req, res) {
-	models.Quiz.findAll().then(function (quizes) {
-		res.render('quizes/index', { quizes: quizes});
-	})
+	if (req.query.search === undefined) {
+		models.Quiz.findAll().then(function (quizes) {
+			res.render('quizes/index', { quizes: quizes});
+		})
+	}else{
+		models.Quiz.findAll({
+			order: [['pregunta', 'ASC']],
+			where: ["pregunta like ?", '%'+req.query.search+'%'] 
+		}).then(function (quizes) {
+			res.render('quizes/index', { quizes: quizes});
+		})		
+	}
 };
 
 // GET /quizes/:id
