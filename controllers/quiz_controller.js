@@ -1,38 +1,44 @@
 var models = require('../models/models.js');
 
+// Autoload
+exports.load = function (req, res, next, quizId) {
+	models.Quiz.find({ where: {id: quizId }}).then( // 	AQUII ---------
+		function(quiz) {
+			if (quiz) {
+				req.quiz = quiz;
+				next();
+			}else{ next( new Error("No existe quizId=" + quizId ) )}
+	}).catch(function(error) {next(error)});	
+};
 
 // GET quizes
 exports.index = function (req, res) {
 	if (req.query.search === undefined) {
 		models.Quiz.findAll().then(function (quizes) {
 			res.render('quizes/index', { quizes: quizes, errors: []});
-		})
+		}).catch(function(error) {next(error)});
 	}else{
 		models.Quiz.findAll({
 			order: [['pregunta', 'ASC']],
 			where: ["pregunta like ?", '%'+req.query.search+'%'] 
 		}).then(function (quizes) {
 			res.render('quizes/index', { quizes: quizes, errors: []});
-		})		
+		}).catch(function(error) {next(error)});		
 	}
 };
 
 // GET /quizes/:id
 exports.show = function (req, res) {
-	models.Quiz.find({where : { id: req.params.quizId }}).then(function (quiz) {
-		res.render('quizes/show', { quiz: quiz, errors: [] });
-	})
+		res.render('quizes/show', { quiz: req.quiz, errors: [] });
 };
 
 // GET quizes/:id/answer
 exports.answer = function (req, res) {
-	models.Quiz.find({where : { id: req.params.quizId }}).then(function (quiz) {
-		if (req.query.respuesta.toLowerCase() === quiz.respuesta) {
-			res.render('quizes/answer',{ quiz: quiz, respuesta: 'Correcto', errors: [] });
+		if (req.query.respuesta.toLowerCase() === req.quiz.respuesta) {
+			res.render('quizes/answer',{ quiz: req.quiz, respuesta: 'Correcto', errors: [] });
 		} else {
-			res.render('quizes/answer', { quiz: quiz, respuesta: 'Incorrecto', errors: [] });
+			res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors: [] });
 		}
-	})
 };
 
 // GET /quizes/new
