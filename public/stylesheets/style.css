@@ -15,6 +15,10 @@ a i {
 	font-size: xx-large;
 }
 
+.right{
+	float: right;
+}
+
 #autor {
 	margin: 5px;
 	width: 250px;

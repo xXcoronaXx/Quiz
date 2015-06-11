@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 
 var partials = require('express-partials');
 var methodOverride = require('method-override');
+var session =  require('express-session');
 
 var app = express();
 
@@ -23,9 +24,21 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
+app.use(cookieParser('Adivina2 2015'));
+app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Helpers dinamicos
+app.use(function(req, res, next) {
+  // guardar el path para redireccionar
+  if (!req.path.match(/\/login|\/logout/)) {
+    req.session.redir = req.path;
+  } 
+
+  res.locals.session = req.session;
+  next();
+});
 
 app.use('/', routes);
 
