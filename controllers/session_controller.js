@@ -1,3 +1,17 @@
+exports.time = function(req, res, next) {
+	if (req.session.user) {
+		var d = new Date();
+		d = d.getTime();
+		if (d - req.session.time < 269838 || req.session.time === undefined) { // 5min aproximados
+			req.session.time = d;	
+		} else{
+			delete req.session.user;
+			delete req.session.time;
+		};
+	}
+	next();
+};
+
 // MW login required
 exports.loginRequired = function(req, res, next) {
 	if (req.session.user) {
@@ -37,5 +51,6 @@ exports.create = function(req, res) {
 // DELETE /logout
 exports.destroy = function(req, res) {
 	delete req.session.user;
+	delete req.session.time;
 	res.redirect(req.session.redir.toString());
 };
